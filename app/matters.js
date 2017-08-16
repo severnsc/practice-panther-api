@@ -12,6 +12,9 @@ let createMatter = (matter) => {
     //Initialize collection
     const col = db.collection('matters')
 
+    //Add date created to the matter
+    matter.dateCreated = new Date()
+
     return col.insertOne(matter).then((result) => {
       assert.equal(1, result.insertedCount)
       return result.ops[0]

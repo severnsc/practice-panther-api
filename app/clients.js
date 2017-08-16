@@ -11,6 +11,9 @@ let createClient = (client) => {
     //Initialize collection
     const col = db.collection('clients')
 
+    //Add date created to client object
+    client.dateCreated = new Date()
+
     //Get object back
     return col.insertOne(client).then((result) => {
       assert.equal(1, result.insertedCount)
