@@ -18,7 +18,7 @@ app.post('/clients', (req, res) => {
 
 app.get('/clients', (req, res) => {
 
-  clients.findClient({name: req.query.name}).then((array) => {
+  clients.findClient(req.query).then((array) => {
     res.status(200).send(array)
   }).catch((e) => {
     res.sendStatus(400)
@@ -38,7 +38,7 @@ app.post('/matters', (req, res) => {
 
 app.get('/matters', (req,res) => {
 
-  matters.findMatter({name: req.query.name}).then((array) => {
+  matters.findMatter(req.query).then((array) => {
     res.status(200).send(array)
   }).catch((e) => {
     res.sendStatus(400)
