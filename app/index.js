@@ -18,7 +18,7 @@ app.post('/clients', (req, res) => {
 
 app.get('/clients', (req, res) => {
 
-  clients.findClient(req.query).then((array) => {
+  clients.findClients(req.query).then((array) => {
     res.status(200).send(array)
   }).catch((e) => {
     res.sendStatus(400)
