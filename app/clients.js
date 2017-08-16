@@ -4,7 +4,7 @@ require('dotenv').config()
 const url = process.env.URL;
 
 let createClient = (client) => {
-  MongoClient.connect(url).then((db) => {
+  const createdClient = MongoClient.connect(url).then((db) => {
 
     console.log("Connected successfuly!")
 
@@ -12,19 +12,20 @@ let createClient = (client) => {
     const col = db.collection('clients')
 
     //Get object back
-    col.insertOne(client, (err, r) => {
-      
-      if(err){
-        console.log(err)
-      }
-
-      assert.equal(1, r.insertedCount)
-      console.log(r)
-
+    return col.insertOne(client).then((result) => {
+      assert.equal(1, result.insertedCount)
+      return result.ops[0]
+    }).catch((e) => {
+      console.log(e)
     })
 
     db.close()
+  }).catch((e) => {
+    console.log(e)
   })
+
+  return createdClient
+
 }
 
 let findClient = (obj) => {
@@ -37,6 +38,8 @@ let findClient = (obj) => {
 
     return col.find(obj).toArray()
 
+  }).catch((e) => {
+    console.log(e)
   })
 
   return foundClients

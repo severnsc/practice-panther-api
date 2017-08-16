@@ -8,32 +8,40 @@ app.use(bodyParser.json())
 
 app.post('/clients', (req, res) => {
   
-  clients.createClient(req.body)
-
-  res.sendStatus(200)
+  clients.createClient(req.body).then((client) => {
+    res.status(201).json(client)
+  }).catch((e) => {
+    res.sendStatus(500)
+  })
 
 })
 
 app.get('/clients', (req, res) => {
 
   clients.findClient({name: req.query.name}).then((array) => {
-    res.send(array)
+    res.status(200).send(array)
+  }).catch((e) => {
+    res.sendStatus(400)
   })
 
 })
 
 app.post('/matters', (req, res) => {
 
-  matters.createMatter(req.body)
-
-  res.sendStatus(200)
+  matters.createMatter(req.body).then((matter) => {
+    res.status(201).json(matter)
+  }).catch((e) => {
+    res.sendStatus(500)
+  })
 
 })
 
 app.get('/matters', (req,res) => {
 
   matters.findMatter({name: req.query.name}).then((array) => {
-    res.send(array)
+    res.status(200).send(array)
+  }).catch((e) => {
+    res.sendStatus(400)
   })
 
 })

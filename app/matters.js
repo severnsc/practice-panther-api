@@ -5,25 +5,26 @@ const url = process.env.URL;
 
 let createMatter = (matter) => {
   
-  MongoClient.connect(url).then((db) => {
+  const createdMatter = MongoClient.connect(url).then((db) => {
 
     console.log("Connected successfuly!")
 
     //Initialize collection
     const col = db.collection('matters')
 
-    col.insertOne(matter, (err, r) => {
-
-      if(err){
-        console.log(err)
-      }
-
-      assert.equal(1, r.insertedCount)
-      console.log(r)
+    return col.insertOne(matter).then((result) => {
+      assert.equal(1, result.insertedCount)
+      return result.ops[0]
+    }).catch((e) => {
+      console.log(e)
     })
 
     db.close()
+  }).catch((e) => {
+    console.log(e)
   })
+
+  return createdMatter
 
 }
 
@@ -38,6 +39,8 @@ let findMatter = (obj) => {
 
     return col.find(obj).toArray()
 
+  }).catch((e) => {
+    console.log(e)
   })
 
   return foundMatters
