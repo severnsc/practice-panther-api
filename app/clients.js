@@ -35,7 +35,7 @@ let findClient = (obj) => {
     //Initialize collection
     const col = db.collection('clients')
 
-    return col.find().toArray()
+    return col.find(obj).toArray()
 
   })
 
