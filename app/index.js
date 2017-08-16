@@ -1,4 +1,5 @@
 const clients = require('./clients')
+const matters = require('./matters')
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
@@ -16,6 +17,22 @@ app.post('/clients', (req, res) => {
 app.get('/clients', (req, res) => {
 
   clients.findClient({name: req.query.name}).then((array) => {
+    res.send(array)
+  })
+
+})
+
+app.post('/matters', (req, res) => {
+
+  matters.createMatter(req.body)
+
+  res.sendStatus(200)
+
+})
+
+app.get('/matters', (req,res) => {
+
+  matters.findMatter({name: req.query.name}).then((array) => {
     res.send(array)
   })
 
