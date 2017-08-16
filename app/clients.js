@@ -28,7 +28,7 @@ let createClient = (client) => {
 }
 
 let findClient = (obj) => {
-  MongoClient.connect(url).then((db) => {
+  const foundClients = MongoClient.connect(url).then((db) => {
 
     console.log("Connected successfuly!")
 
@@ -36,9 +36,10 @@ let findClient = (obj) => {
     const col = db.collection('clients')
 
     return col.find().toArray()
-  }).then((items) => {
-    res.send(items)
+
   })
+
+  return foundClients
 }
 
 module.exports.createClient = createClient

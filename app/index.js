@@ -15,7 +15,9 @@ app.post('/clients', (req, res) => {
 
 app.get('/clients', (req, res) => {
 
-  
+  clients.findClient({name: req.query.name}).then((array) => {
+    res.send(array)
+  })
 
 })
 
