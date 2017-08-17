@@ -1,5 +1,5 @@
 {
-  "name": "Practice Panther Emails",
+  "name": "Practice-Panther-Emails",
   "version": "1.0.0",
   "description": "Sends email updates from Practice Panther data",
   "main": "index.js",
@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js"
   },
-  "author": "",
+  "author": "chris-severns",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.17.2",
