@@ -42,6 +42,6 @@ const sendEmail = () => {
   })
 }
 //Schedule the job to run every day at 8am
-const dailyEmailJob = schedule.scheduleJob('8 * * * * *', sendEmail)
+const dailyEmailJob = schedule.scheduleJob('8 * * *', sendEmail)
 //Export the job to call it in the server's listen function
 module.exports.dailyEmailJob = dailyEmailJob
