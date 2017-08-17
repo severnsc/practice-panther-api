@@ -1,5 +1,6 @@
 const clients = require('./clients')
 const matters = require('./matters')
+const mailer = require('./mailer')
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
@@ -48,4 +49,5 @@ app.get('/matters', (req,res) => {
 
 app.listen(process.env.PORT, () => {
   console.log("Listening on port " + process.env.PORT)
+  mailer.dailyEmailJob
 })
