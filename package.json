@@ -10,6 +10,7 @@
   "author": "chris-severns",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^1.0.2",
     "body-parser": "^1.17.2",
     "dotenv": "^4.0.0",
     "express": "^4.15.4",
