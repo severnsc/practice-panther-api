@@ -35,7 +35,7 @@ const createUser = (user) => {
     //Initialize collection
     const col = db.collection('users')
 
-    return findUser(user).then((foundUser) => {
+    return findUser(user).then(async (foundUser) => {
       if(foundUser){
         return "Username already taken!"
       }else{
@@ -43,7 +43,9 @@ const createUser = (user) => {
         const apiKey = crypto.randomBytes(48).toString('base64')
 
         //Hash the apiKey async
-        user.digest = hash(apiKey)
+        user.digest = await hash(apiKey)
+
+        console.log(user.digest)
 
         //Create the user
         return col.insertOne(user).then((result) => {

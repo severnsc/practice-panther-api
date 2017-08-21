@@ -15,9 +15,19 @@ const validateUser = async (userName, apiKey) => {
     }else{
       false
     }
+  }).catch((e) => {
+    console.log(e)
   })
 
   return userValidated
+
+}
+
+const isAdmin = async (userName) => {
+
+  const user = await users.findUser({userName: userName})
+
+  return user.admin
 
 }
 

@@ -9,19 +9,39 @@ const bodyParser = require('body-parser')
 
 app.use(bodyParser.json())
 
-app.use('/clients/new', (req, res, next) => {
-  
+app.use('/*/new', (req, res, next) => {
+ 
   authenticate.validateUser(req.body.userName, req.get('Authorization')).then((bool) => {
     if(bool){
       console.log("User authenticated!")
       next()
     }else{
+      console.log("username and API key don't match")
       res.sendStatus(401)
     }
+  }).catch((e) => {
+    console.log(e)
+    res.sendStatus(500)
   })
 
 })
+/*
+app.use('/users/new', (req, res, next) => {
 
+  authenticate.isAdmin(req.body.userName).then((bool) => {
+
+    if(bool){
+      console.log("User validated")
+      next()
+    }else{
+      console.log("User is not an admin")
+      res.sendStatus(401)
+    }
+
+  })
+
+})
+*/
 app.post('/clients/new', (req, res) => {
   
   clients.createClient(req.body.client).then((client) => {
