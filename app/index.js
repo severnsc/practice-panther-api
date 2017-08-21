@@ -38,6 +38,9 @@ app.use('/users/new', (req, res, next) => {
       res.sendStatus(401)
     }
 
+  }).catch((e) => {
+    console.log(e)
+    res.sendStatus(500)
   })
 
 })
