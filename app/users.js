@@ -35,22 +35,29 @@ const createUser = (user) => {
     //Initialize collection
     const col = db.collection('users')
 
-    //Generate crypto random apiKey
-    const apiKey = crypto.randomBytes(48).toString('base64')
+    return findUser(user).then((foundUser) => {
+      if(foundUser){
+        return "Username already taken!"
+      }else{
+        //Generate crypto random apiKey
+        const apiKey = crypto.randomBytes(48).toString('base64')
 
-    //Hash the apiKey async
-    user.digest = hash(apiKey)
+        //Hash the apiKey async
+        user.digest = hash(apiKey)
 
-    //Create the user
-    return col.insertOne(user).then((result) => {
+        //Create the user
+        return col.insertOne(user).then((result) => {
 
-      assert.equal(1, result.insertedCount)
+          assert.equal(1, result.insertedCount)
 
-      //Only return the username and API Key
-      return {userName: user.userName, apiKey: apiKey}
-
+          //Only return the username and API Key
+          return {userName: user.userName, apiKey: apiKey}
+        }).catch((e) => {
+        console.log(e)
+        })
+      }
     }).catch((e) => {
-      console.log(e)
+    console.log(e)
     })
 
   }).catch((e) => {

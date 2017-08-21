@@ -44,7 +44,7 @@ app.get('/clients', (req, res) => {
 
 })
 
-app.post('/new-matter', (req, res) => {
+app.post('/matter/new', (req, res) => {
 
   matters.createMatter(req.body).then((matter) => {
     res.status(201).json(matter)
