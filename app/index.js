@@ -100,6 +100,17 @@ app.post('/users/new', (req, res) => {
 
 })
 
+app.get('/user', (req, res) => {
+
+  users.findUser(req.query).then((user) => {
+    res.status(200).json(user)
+  }).catch((e) => {
+    console.log(e)
+    res.sendStatus(500)
+  })
+
+})
+
 app.listen(process.env.PORT, () => {
   console.log("Listening on port " + process.env.PORT)
   mailer.dailyEmailJob
