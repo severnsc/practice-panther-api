@@ -25,7 +25,7 @@ app.use('/*/new', (req, res, next) => {
   })
 
 })
-/*
+
 app.use('/users/new', (req, res, next) => {
 
   authenticate.isAdmin(req.body.userName).then((bool) => {
@@ -41,7 +41,7 @@ app.use('/users/new', (req, res, next) => {
   })
 
 })
-*/
+
 app.post('/clients/new', (req, res) => {
   
   clients.createClient(req.body.client).then((client) => {
@@ -66,7 +66,7 @@ app.get('/clients', (req, res) => {
 
 app.post('/matter/new', (req, res) => {
 
-  matters.createMatter(req.body).then((matter) => {
+  matters.createMatter(req.body.matter).then((matter) => {
     res.status(201).json(matter)
   }).catch((e) => {
     console.log(e)
@@ -88,7 +88,7 @@ app.get('/matters', (req,res) => {
 
 app.post('/users/new', (req, res) => {
 
-  users.createUser(req.body).then((user) => {
+  users.createUser(req.body.user).then((user) => {
     res.status(201).json(user)
   }).catch((e) => {
     console.log(e)

@@ -32,3 +32,4 @@ const isAdmin = async (userName) => {
 }
 
 module.exports.validateUser = validateUser
+module.exports.isAdmin = isAdmin

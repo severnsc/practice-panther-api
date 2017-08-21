@@ -45,8 +45,6 @@ const createUser = (user) => {
         //Hash the apiKey async
         user.digest = await hash(apiKey)
 
-        console.log(user.digest)
-
         //Create the user
         return col.insertOne(user).then((result) => {
 
