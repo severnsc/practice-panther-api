@@ -1,9 +1,10 @@
+#!/usr/bin/env node
+
 require('dotenv').config();
 const clients = require('./clients');
-const schedule = require('node-schedule');
 const helper = require('sendgrid').mail;
 
-const sendEmail = () => {
+const sendClientEmail = async () => {
   const fromEmail = new helper.Email(process.env.FROM_EMAIL);
   const toEmail = new helper.Email(process.env.TO_EMAIL);
   const subject = 'Yesterday\'s Practice Panther New clients';
@@ -11,16 +12,14 @@ const sendEmail = () => {
   const sg = require('sendgrid')(process.env.SENDGRID_API_KEY);
   //Create new email helper
   let mail = new helper.Mail(fromEmail, subject, toEmail, content)
-  //Will become the client list in the email HTML
-  let clientsString = ""
   //Get today's date and then set it to yesterday
   let date = new Date()
   date.setDate(date.getDate() - 1)
-  //Get any clients created in last 24 hours
-  clients.findClients({dateCreated: {$gte: date}}).then((array) => {
-    array.forEach((client) => {
-      clientsString + "<li>" + client.name + "</li>"
-    })
+  //Get any clients created in last 24 hours, string them together to add to the email's body
+  let clientsString = await clients.findClients({dateCreated: {$gte: date}}).then((array) => {
+    return array.reduce((string, client) => {
+      return string + `<li>${client.firstname} ${client.lastname} | ${client.email}</li>`
+    }, "")
   })
   //Add client list to email HTML
   const htmlContent = new helper.Content('text/html', "<html><body><ul>" + clientsString + "</ul></body></html>")
@@ -41,7 +40,5 @@ const sendEmail = () => {
     console.log(response.headers)
   })
 }
-//Schedule the job to run every day at 8am
-const dailyEmailJob = schedule.scheduleJob('8 * * *', sendEmail)
-//Export the job to call it in the server's listen function
-module.exports.dailyEmailJob = dailyEmailJob
+//Call the job
+sendClientEmail()

@@ -113,5 +113,4 @@ app.get('/user', (req, res) => {
 
 app.listen(process.env.PORT, () => {
   console.log("Listening on port " + process.env.PORT)
-  mailer.dailyEmailJob
 })
