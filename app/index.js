@@ -80,7 +80,7 @@ app.post('/matter/new', (req, res) => {
 
 app.get('/matters', (req,res) => {
 
-  matters.findMatter(req.query).then((array) => {
+  matters.findMatters(req.query).then((array) => {
     res.status(200).send(array)
   }).catch((e) => {
     console.log(e)

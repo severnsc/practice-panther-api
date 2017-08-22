@@ -31,7 +31,7 @@ let createMatter = (matter) => {
 
 }
 
-let findMatter = (obj) => {
+let findMatters = (obj) => {
 
   const foundMatters = MongoClient.connect(url).then((db) => {
 
@@ -51,4 +51,4 @@ let findMatter = (obj) => {
 }
 
 module.exports.createMatter = createMatter
-module.exports.findMatter = findMatter
+module.exports.findMatters = findMatters
