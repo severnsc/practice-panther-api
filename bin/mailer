@@ -2,29 +2,23 @@
 
 require('dotenv').config();
 const clients = require('../app/clients');
+const matters = require('../app/matters')
 const helper = require('sendgrid').mail;
+const sg = require('sendgrid')(process.env.SENDGRID_API_KEY);
+const fromEmail = new helper.Email(process.env.FROM_EMAIL);
+const toEmail = new helper.Email(process.env.TO_EMAIL);
 
-const sendClientEmail = async () => {
-  const fromEmail = new helper.Email(process.env.FROM_EMAIL);
-  const toEmail = new helper.Email(process.env.TO_EMAIL);
-  const subject = 'Yesterday\'s Practice Panther New clients';
-  const content = new helper.Content('text/plain', 'New Clients');
-  const sg = require('sendgrid')(process.env.SENDGRID_API_KEY);
-  //Create new email helper
-  let mail = new helper.Mail(fromEmail, subject, toEmail, content)
-  //Get today's date and then set it to yesterday
+const yesterdaysDate = () => {
+  //Get today's date and subtract 1 day
   let date = new Date()
-  date.setDate(date.getDate() - 1)
-  //Get any clients created in last 24 hours, string them together to add to the email's body
-  let clientsString = await clients.findClients({dateCreated: {$gte: date}}).then((array) => {
-    return array.reduce((string, client) => {
-      return string + `<li>${client.firstname} ${client.lastname} | ${client.email}</li>`
-    }, "")
-  })
-  //Add client list to email HTML
-  const htmlContent = new helper.Content('text/html', "<html><body><ul>" + clientsString + "</ul></body></html>")
+  return date.setDate(date.getDate() - 1)
+}
+
+const sendEmail = (fromEmail, subject, toEmail, header, body) => {
+  const headerContent = new helper.Content('text/plain', header)
+  let mail = new helper.Mail(fromEmail, subject, toEmail, headerContent)
+  const htmlContent = new helper.Content('text/html', "<html><body>" + body + "</body></html>")
   mail.addContent(htmlContent)
-  //Setup for Sendgrid API POST request
   const request = sg.emptyRequest({
     method: 'POST',
     path: '/v3/mail/send',
@@ -40,5 +34,35 @@ const sendClientEmail = async () => {
     console.log(response.headers)
   })
 }
-//Call the job
-sendClientEmail()
+
+const sendClientEmail = async (fromEmail, toEmail) => {
+  const subject = 'Yesterday\'s Practice Panther New clients';
+  const header = 'New Clients'
+  const date = yesterdaysDate()
+  //Get any clients created in last 24 hours, string them together to add to the email's body
+  let clientsString = await clients.findClients({dateCreated: {$gte: date}}).then((array) => {
+    return array.reduce((string, client) => {
+      return string + `<li>Client: ${client.firstname} ${client.lastname} | Email: ${client.email}</li>`
+    }, "")
+  })
+  clientsString = `<ul>${clientsString}</ul>`
+  sendEmail(fromEmail, subject, toEmail, header, clientsString)
+}
+
+const sendMattersEmail = async (fromEmail, toEmail) => {
+  const subject = 'Yesterday\'s Pracice Panther New Matters'
+  const header = "New Matters"
+  const date = yesterdaysDate()
+  //Get any matters created in the last 24 hours, string them together for email body
+  let mattersString = await matters.findMatters({dateCreated: {$gte: date}}).then((array) => {
+    return array.reduce((string, matter) => {
+      return string + `<li>Matter name: ${matter.name} | Matter contact: ${matter.contact} | Assigned to: ${matter.assignedTo}</li>`
+    }, "")
+  })
+  mattersString = `<ul>${mattersString}</ul>`
+  sendEmail(fromEmail, subject, toEmail, header, mattersString)
+}
+
+//Call the jobs
+sendClientEmail(fromEmail, toEmail)
+sendMattersEmail(fromEmail, toEmail)
