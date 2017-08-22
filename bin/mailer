@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 require('dotenv').config();
-const clients = require('./clients');
+const clients = require('./app/clients');
 const helper = require('sendgrid').mail;
 
 const sendClientEmail = async () => {
